@@ -244,8 +244,8 @@ describe('GET /hotels/:hotelId', () => {
 
       expect(response.status).toEqual(httpStatus.NOT_FOUND);
     });
-    /*
-    it('should respond with status 200 and with available hotels data', async () => {
+
+    it('should respond with status 200 and with all rooms for the choosen hotel', async () => {
       const user = await createUser();
       const token = await generateValidToken(user);
       const enrollment = await createEnrollmentWithAddress(user);
@@ -254,20 +254,28 @@ describe('GET /hotels/:hotelId', () => {
       const hotel = await createHotel();
       const room = await createRoom(hotel.id);
 
-      const response = await server.get('/hotels').set('Authorization', `Bearer ${token}`);
+      const response = await server.get(`/hotels/${hotel.id}`).set('Authorization', `Bearer ${token}`);
 
       expect(response.status).toEqual(httpStatus.OK);
       expect(response.body).toEqual(
-        expect.arrayContaining([
-          expect.objectContaining({
-            id: expect.any(Number),
-            name: expect.any(String),
-            image: expect.any(String),
-            createdAt: expect.any(String),
-            updatedAt: expect.any(String),
-          }),
-        ]),
+        expect.objectContaining({
+          id: expect.any(Number),
+          name: expect.any(String),
+          image: expect.any(String),
+          createdAt: expect.any(String),
+          updatedAt: expect.any(String),
+          Rooms: expect.arrayContaining([
+            expect.objectContaining({
+              id: expect.any(Number),
+              name: expect.any(String),
+              capacity: expect.any(Number),
+              hotelId: expect.any(Number),
+              createdAt: expect.any(String),
+              updatedAt: expect.any(String),
+            }),
+          ]),
+        }),
       );
-    });*/
+    });
   });
 });
