@@ -24,6 +24,26 @@ async function getHotelsByUserId(userId: number): Promise<Hotel[]> {
   return hotels;
 }
 
-const hotelService = { getHotelsByUserId };
+async function getRoomsbyHotelId(userId: number, hotelId: number) {
+  const enrollment = await enrollmentRepository.findWithAddressByUserId(userId);
+  if (!enrollment) throw notFoundError();
+
+  const ticket = await ticketsRepository.findTicketByEnrollmentId(enrollment.id);
+  if (!ticket) throw notFoundError();
+
+  if (ticket.status !== 'PAID') throw paymentRequiredError();
+
+  if (!ticket.TicketType.includesHotel) throw hotelNotIncludedError();
+
+  if (ticket.TicketType.isRemote) throw remoteTicketError();
+
+  const hotelRooms = await hotelsRepository.findHotelRooms(hotelId);
+
+  if (!hotelRooms) throw notFoundError();
+
+  return hotelRooms;
+}
+
+const hotelService = { getHotelsByUserId, getRoomsbyHotelId };
 
 export default hotelService;
