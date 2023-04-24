@@ -1,6 +1,6 @@
 import Joi from 'joi';
-import { InputHotelBody } from '@/protocols';
+import { InputHotelParam } from '@/protocols';
 
-export const hotelsSchema = Joi.object<InputHotelBody>({
-  hotelId: Joi.number().required(),
+export const hotelsSchema = Joi.object<InputHotelParam>({
+  hotelId: Joi.number().integer().greater(0).required(),
 });
